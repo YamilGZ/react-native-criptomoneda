@@ -1,6 +1,3 @@
-/**
- * Punto de entrada para exportar componentes reutilizables.
- *
- * Ejemplo:
- * export { default as Header } from './Header';
- */
+export { Header } from './Header';
+export { Cotizacion } from './Cotizacion';
+export { Formulario } from './Formulario';
