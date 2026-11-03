@@ -1,97 +1,290 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# 💰 Criptomonedas — React Native
 
-# Getting Started
+Aplicación construida con **React Native 0.87.1** para consultar cotizaciones de criptomonedas en distintas monedas fiduciarias. Incluye un formulario con pickers personalizados, imagen principal y fuentes locales vinculadas a los proyectos nativos de Android e iOS.
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+> Proyecto generado con [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-## Step 1: Start Metro
+---
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+## 📋 Requisitos
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+- **Node.js** >= 22.11.0
+- **Android SDK** (API 24+, compileSdk 37)
+- **Android Emulator** o dispositivo físico conectado
+- **Java JDK** 17+
+- **Git Bash** o PowerShell (Windows)
 
-```sh
-# Using npm
-npm start
+> **Nota sobre iOS:** el proyecto incluye la carpeta `ios/` generada por React Native CLI, pero las instrucciones de este README están orientadas a Android. Para compilar en iOS se requiere macOS con Xcode.
 
-# OR using Yarn
-yarn start
+---
+
+## 🚀 Cómo levantar el proyecto
+
+### Opción 1: Script automático (Recomendado)
+
+Ejecutá el script que hace todo automáticamente:
+
+```powershell
+npm run android:full
 ```
 
-## Step 2: Build and run your app
+Este script:
+- Cierra Metro anterior si está corriendo en el puerto 8081
+- Inicia el emulador si no está abierto
+- Cierra y limpia la caché de la app anterior
+- Inicia Metro bundler en una ventana separada
+- Compila e instala la APK
+- Reinicia la app para una conexión limpia
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+### Opción 2: Manual por pasos
 
-### Android
+**Paso 1 — Instalar dependencias:**
 
-```sh
-# Using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```bash
+npm install
 ```
 
-### iOS
+**Paso 2 — Vincular fuentes nativas:**
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
-
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
-
-```sh
-bundle install
+```bash
+npx react-native-asset
 ```
 
-Then, and every time you update your native dependencies, run:
+**Paso 3 — Metro bundler:**
 
-```sh
-bundle exec pod install
+```bash
+npx react-native start
 ```
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+**Paso 4 — Compilar e instalar:**
 
-```sh
-# Using npm
-npm run ios
+En otra terminal:
 
-# OR using Yarn
-yarn ios
+```bash
+cd android
+./gradlew clean
+./gradlew :app:assembleDebug
+cd ..
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb shell am start -n com.criptomonedas/.MainActivity
 ```
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+---
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+## 🧪 Tests y calidad de código
 
-## Step 3: Modify your app
+| Comando | Propósito |
+|---------|-----------|
+| `npm test` | Ejecuta la suite de Jest |
+| `npm run lint` | Ejecuta ESLint sobre todo el proyecto |
+| `npx tsc --noEmit` | Verifica tipos de TypeScript sin emitir archivos |
 
-Now that you have successfully run the app, let's make changes!
+---
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+## ✨ Funcionalidades
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+- **Header personalizado**: título con fuente local `Lato-Black` y estilos propios.
+- **Imagen principal**: imagen de criptomonedas renderizada en `App.tsx`.
+- **Formulario de consulta**: pickers para seleccionar moneda fiduciaria y criptomoneda.
+- **Fuentes locales**: familia `Lato` vinculada en Android e iOS vía `react-native-asset`.
+- **Estructura modular**: componentes organizados bajo `src/components/`.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+---
 
-## Congratulations! :tada:
+## 📸 Vistas de la app
 
-You've successfully run and modified your React Native App. :partying_face:
+> Sección reservada para capturas de pantalla. Agregá las imágenes en una carpeta `screenshots/` y referencialas aquí:
 
-### Now what?
+```markdown
+![Pantalla principal](screenshots/screenshot-home.png)
+```
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
+---
 
-# Troubleshooting
+## 🪵 Cómo ver los logs (console.log / console.warn)
 
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+En React Native 0.87 con Hermes, los `console.log` a veces no aparecen en la terminal de Metro. Usá este comando para verlos en tiempo real:
 
-# Learn More
+```bash
+adb logcat -s ReactNativeJS:D
+```
 
-To learn more about React Native, take a look at the following resources:
+**Filtrar solo tu app:**
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+```bash
+adb logcat -s ReactNativeJS:D *:S
+```
+
+**Ver todo el log del sistema (útil para errores nativos):**
+
+```bash
+adb logcat
+```
+
+**Limpiar y empezar desde cero:**
+
+```bash
+adb logcat -c
+adb logcat -s ReactNativeJS:D
+```
+
+---
+
+## ⌨️ Comandos útiles de Metro
+
+Una vez que Metro esté corriendo, presioná:
+
+| Tecla | Acción |
+|-------|--------|
+| `r` | Recargar app(s) |
+| `d` | Abrir Dev Menu |
+| `j` | Abrir DevTools (React Native DevTools) |
+| `Ctrl + C` | Cerrar Metro |
+
+---
+
+## 📁 Estructura del proyecto
+
+```
+react-native-criptomonedas/
+├── android/              # Proyecto Android nativo
+├── ios/                  # Proyecto iOS nativo (requiere macOS + Xcode)
+├── assets/               # Recursos locales
+│   ├── fonts/            # Fuentes Lato
+│   └── img/              # Imágenes de la app
+├── src/                  # Código fuente organizado
+│   ├── components/       # Componentes reutilizables (Header, Formulario, Cotizacion)
+│   ├── helpers/          # Funciones utilitarias
+│   ├── styles/           # Estilos globales
+│   └── types/            # Tipos compartidos de TypeScript
+├── App.tsx               # Pantalla principal
+├── index.js              # Punto de entrada de la app
+├── start.ps1             # Script automático de inicio en Windows
+├── react-native.config.js # Configuración de assets para react-native-asset
+├── package.json
+├── package-lock.json
+├── metro.config.js
+├── babel.config.js
+├── tsconfig.json
+├── jest.config.js
+├── jest.setup.js
+├── .eslintrc.js
+├── .prettierrc.js
+└── README.md
+```
+
+---
+
+## 📦 Dependencias principales
+
+| Paquete | Versión | Uso |
+|---------|---------|-----|
+| `react-native` | 0.87.1 | Framework principal |
+| `react` | 19.2.3 | Librería React |
+| `react-native-safe-area-context` | ^5.5.2 | SafeAreaView y contexto de área segura |
+| `@react-native-picker/picker` | ^2.11.4 | Pickers nativos para moneda y criptomoneda |
+
+---
+
+## 📦 Build de release (APK)
+
+Para generar una APK de release, usá el script ya configurado en `package.json`:
+
+```bash
+npm run build:apk
+```
+
+Este comando compila la APK de release y la copia directamente a la raíz como `app-criptomonedas.apk`.
+
+Si preferís hacerlo paso a paso manual:
+
+```bash
+npm install
+cd android && ./gradlew assembleRelease
+```
+
+La APK de release se generará en:
+
+```
+android/app/build/outputs/apk/release/app-release.apk
+```
+
+---
+
+## 🛠️ Solución de problemas
+
+### Pantalla en negro / App no carga
+
+```bash
+adb shell am force-stop com.criptomonedas
+adb shell pm clear com.criptomonedas
+adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+adb shell am start -n com.criptomonedas/.MainActivity
+```
+
+### Emulador no se detecta
+
+```bash
+adb devices
+```
+
+Si no aparece, iniciá el emulador manualmente:
+
+```bash
+emulator -avd Pixel_4
+```
+
+### Error "Metro ya está corriendo"
+
+Matá el proceso anterior:
+
+```bash
+netstat -ano | findstr 8081
+taskkill /F /PID <PID>
+```
+
+### Error "RNCAndroidDialogPicker" no encontrado
+
+El picker nativo no está compilado en la APK. Ejecutá:
+
+```bash
+cd android
+./gradlew clean
+cd ..
+npx react-native run-android
+```
+
+---
+
+## 🧹 Limpieza de archivos generados
+
+Si el proyecto ocupa varios GB, es por archivos generados durante la compilación. El `.gitignore` ya evita que entren en git, pero los archivos siguen ocupando espacio en disco de forma local.
+
+Estas carpetas se pueden borrar de forma segura:
+
+```bash
+rm -rf android/app/build
+rm -rf android/app/.cxx
+rm -rf android/.gradle
+rm -rf android/build
+rm -rf node_modules
+```
+
+O podés usar el script ya configurado en `package.json`:
+
+```bash
+npm run clean:deps
+```
+
+### Regenerar el proyecto después de limpiar
+
+```bash
+npm install
+npm run build:apk
+```
+
+---
+
+## 👨‍💻 Autor
+
+- **Yamil Zaracho**
