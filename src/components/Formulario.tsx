@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
-  ActivityIndicator,
   StyleSheet,
   Text,
   View,
+  TouchableHighlight,
+  Alert
 } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
@@ -14,11 +15,17 @@ interface Criptomoneda {
   name: string;
 }
 
-export const Formulario = () => {
-  const [moneda, guardarMoneda] = useState('');
-  const [criptomoneda, guardarCriptomoneda] = useState('');
+interface FormularioProps {
+  moneda: string;
+  guardarMoneda: (valor: string) => void;
+  criptomoneda: string;
+  guardarCriptomoneda: (valor: string) => void;
+  guardarConsultarAPI: (valor: boolean) => void;
+}
+
+export const Formulario = ({moneda, guardarMoneda, criptomoneda, guardarCriptomoneda, guardarConsultarAPI}: FormularioProps) => {
+
   const [criptomonedas, guardarCriptomonedas] = useState<Criptomoneda[]>([]);
-  const [cargando, guardarCargando] = useState(true);
 
   useEffect (() => {
     const consultarAPI = async () => {
@@ -28,13 +35,12 @@ export const Formulario = () => {
         guardarCriptomonedas(resultado.data)
       } catch (error) {
         console.error('Error al consultar CoinGecko:', error);
-      } finally {
-        guardarCargando(false);
       }
     }
     consultarAPI();
   }, [])
 
+  // Almacena las selecciones del usuario
   const obtenerMoneda = (valor: string) => {
     guardarMoneda(valor);
   };
@@ -42,6 +48,27 @@ export const Formulario = () => {
   const obtenerCriptomoneda = (valor: string) => {
     guardarCriptomoneda(valor);
   };
+
+  const cotizarPrecio = () => {
+    if (moneda.trim() === '' || criptomoneda.trim() === '') {
+      mostrarAlerta()
+      return;
+    }
+
+    // cambiar el state de consultar api
+    guardarConsultarAPI(true)
+
+  }
+
+  const mostrarAlerta = () => {
+    Alert.alert(
+      'Error...',
+      'Ambos campos son obligatorios',
+      [
+        {text: 'OK'}
+      ]
+    )
+  }
 
   return (
     <View>
@@ -59,9 +86,6 @@ export const Formulario = () => {
 
       <Text style={styles.label}>Criptomoneda</Text>
 
-      {cargando ? (
-        <ActivityIndicator size="large" color="#5e49e2" />
-      ) : (
         <Picker
           onValueChange={(valor: string) => obtenerCriptomoneda(valor)}
           selectedValue={criptomoneda}>
@@ -70,11 +94,17 @@ export const Formulario = () => {
             <Picker.Item
               key={cripto.id}
               label={`${cripto.name} (${cripto.symbol.toUpperCase()})`}
-              value={cripto.symbol.toUpperCase()}
+              value={cripto.id}
             />
           ))}
         </Picker>
-      )}
+
+        <TouchableHighlight
+          style={styles.btnCotizar}
+          onPress={() => cotizarPrecio()}
+        >
+          <Text style={styles.textoCotizar}>Cotizar</Text>
+        </TouchableHighlight>
 
     </View>
   );
@@ -86,5 +116,18 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 22,
     marginVertical: 20,
+  },
+  btnCotizar: {
+    backgroundColor: '#5e49e2',
+    padding: 10,
+    marginTop: 20,
+    borderRadius: 10
+  },
+  textoCotizar: {
+    color: '#fff',
+    fontSize: 18,
+    fontFamily: 'Lato-Black',
+    textTransform: 'uppercase',
+    textAlign: 'center'
   },
 });
