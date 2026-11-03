@@ -1,9 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, View, Image, ScrollView } from 'react-native';
+import {
+  ActivityIndicator,
+  StyleSheet,
+  View,
+  Image,
+  ScrollView,
+} from 'react-native';
 import { Header, Formulario, Cotizacion } from './src/components';
 import { obtenerTasaUSD } from './src/helpers';
 import axios from 'axios';
 
+/**
+ * Datos de cotización devueltos por CoinGecko para una criptomoneda.
+ * La app solo consume un subconjunto de campos.
+ */
 export interface ResultadoCotizacion {
   id: string;
   symbol: string;
@@ -18,15 +28,34 @@ export interface ResultadoCotizacion {
   image: string;
 }
 
+/**
+ * Componente principal de la aplicación.
+ * Mantiene el estado global, dispara la cotización y renderiza
+ * header, imagen, formulario y resultado.
+ */
 const App = () => {
-
+  // Moneda fiduciaria seleccionada (PYG, USD, MXN, EUR, GBP).
   const [moneda, guardarMoneda] = useState('');
+
+  // ID de CoinGecko de la criptomoneda seleccionada (ej. bitcoin).
   const [criptomoneda, guardarCriptomoneda] = useState('');
+
+  // Flag que activa la consulta a la API desde el useEffect.
   const [consultarAPI, guardarConsultarAPI] = useState(false);
+
+  // Indica si la app está consultando la API.
   const [cargando, guardarCargando] = useState(false);
+
+  // Resultado de la cotización obtenido de CoinGecko.
   const [resultado, guardarResultado] = useState<ResultadoCotizacion | null>(null);
 
+  /**
+   * useEffect que escucha el flag consultarAPI.
+   * Cuando Formulario activa el flag, se consulta CoinGecko y se guarda el resultado.
+   * Si la moneda es PYG, se consulta en USD y se convierte usando la tasa del día.
+   */
   useEffect(() => {
+    // Si no se solicitó consulta, no hacemos nada.
     if (!consultarAPI) {
       return;
     }
@@ -37,6 +66,8 @@ const App = () => {
 
       try {
         const monedaTarget = moneda.toUpperCase();
+
+        // CoinGecko no soporta PYG, por lo que consultamos en USD y convertimos después.
         const monedaAPI = monedaTarget === 'PYG' ? 'usd' : monedaTarget.toLowerCase();
 
         const url = 'https://api.coingecko.com/api/v3/coins/markets';
@@ -54,6 +85,7 @@ const App = () => {
         if (data && data.length > 0) {
           const cripto = data[0];
 
+          // Conversión manual a PYG porque CoinGecko no la ofrece.
           if (monedaTarget === 'PYG') {
             const tasa = await obtenerTasaUSD('PYG');
             if (tasa) {
@@ -80,13 +112,16 @@ const App = () => {
 
   return (
     <ScrollView>
+      {/** Encabezado de la app */}
       <Header />
 
+      {/** Imagen principal */}
       <Image
         style={styles.imagen}
         source={require('./assets/img/cryptomonedas.png')}
       />
 
+      {/** Formulario de selección */}
       <View style={styles.contenido}>
         <Formulario
           moneda={moneda}
@@ -97,6 +132,7 @@ const App = () => {
         />
       </View>
 
+      {/** Área de resultado o spinner de carga */}
       <View style={{ marginTop: 40 }}>
         {cargando ? (
           <ActivityIndicator size="large" color="#5E49E2" />

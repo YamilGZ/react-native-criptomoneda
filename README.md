@@ -86,8 +86,14 @@ adb shell am start -n com.criptomonedas/.MainActivity
 - **Header personalizado**: título con fuente local `Lato-Black` y estilos propios.
 - **Imagen principal**: imagen de criptomonedas renderizada en `App.tsx`.
 - **Formulario de consulta**: pickers para seleccionar moneda fiduciaria y criptomoneda.
+  - Carga las 10 criptomonedas con mayor capitalización desde CoinGecko.
+  - Validación nativa si faltan campos.
+- **Cotización en tiempo real**: consulta CoinGecko (`/coins/markets`) y muestra precio actual, precios alto/bajo del día, variación 24h y última actualización.
+- **Soporte de monedas**: USD, MXN, EUR, GBP y **PYG (Guaraní Paraguayo)**.
+  - CoinGecko no soporta PYG, por lo que se consulta en USD y se convierte con la tasa del día vía `open.er-api.com`.
+- **Formato de moneda**: helper `formatearCantidad` que formatea los valores con símbolo según la moneda seleccionada.
 - **Fuentes locales**: familia `Lato` vinculada en Android e iOS vía `react-native-asset`.
-- **Estructura modular**: componentes organizados bajo `src/components/`.
+- **Estructura modular**: componentes organizados bajo `src/components/` y helpers bajo `src/helpers/`.
 
 ---
 

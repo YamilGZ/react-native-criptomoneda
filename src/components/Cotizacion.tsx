@@ -3,37 +3,73 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 import { formatearCantidad } from '../helpers';
 import type { ResultadoCotizacion } from '../../App';
 
+/**
+ * Props del componente Cotizacion.
+ */
 interface CotizacionProps {
-  resultado: ResultadoCotizacion | null;
-  moneda: string;
+  resultado: ResultadoCotizacion | null; // Datos de la cotización obtenidos de CoinGecko.
+  moneda: string;                         // Código ISO de la moneda fiduciaria seleccionada.
 }
 
+/**
+ * Muestra el resultado de la cotización de una criptomoneda:
+ * logo, nombre, precio actual, precios alto/bajo del día,
+ * variación porcentual 24h y última actualización.
+ */
 export const Cotizacion = ({ resultado, moneda }: CotizacionProps) => {
+  // Si aún no hay resultado (usuario no cotizó), no se renderiza nada.
   if (!resultado) {
     return null;
   }
 
-  const { name, symbol, current_price, high_24h, low_24h, price_change_percentage_24h, last_updated, image } = resultado;
+  const {
+    name,
+    symbol,
+    current_price,
+    high_24h,
+    low_24h,
+    price_change_percentage_24h,
+    last_updated,
+    image,
+  } = resultado;
+
+  // Fallback a USD por si la prop llega vacía.
   const monedaSeleccionada = moneda || 'USD';
 
   return (
     <View style={styles.resultado}>
+      {/** Logo de la criptomoneda */}
       {image ? <Image source={{ uri: image }} style={styles.logo} /> : null}
+
+      {/** Nombre y símbolo */}
       <Text style={[styles.texto, styles.titulo]}>
         {name} ({symbol.toUpperCase()})
       </Text>
 
+      {/** Precio actual formateado como moneda */}
       <Text style={[styles.texto, styles.precio]}>
-        <Text style={styles.span}>{formatearCantidad(current_price, monedaSeleccionada)}</Text>
+        <Text style={styles.span}>
+          {formatearCantidad(current_price, monedaSeleccionada)}
+        </Text>
       </Text>
+
+      {/** Precio más alto del día */}
       <Text style={styles.texto}>
         Precio más alto del día:{' '}
-        <Text style={styles.span}>{formatearCantidad(high_24h, monedaSeleccionada)}</Text>
+        <Text style={styles.span}>
+          {formatearCantidad(high_24h, monedaSeleccionada)}
+        </Text>
       </Text>
+
+      {/** Precio más bajo del día */}
       <Text style={styles.texto}>
         Precio más bajo del día:{' '}
-        <Text style={styles.span}>{formatearCantidad(low_24h, monedaSeleccionada)}</Text>
+        <Text style={styles.span}>
+          {formatearCantidad(low_24h, monedaSeleccionada)}
+        </Text>
       </Text>
+
+      {/** Variación porcentual con color según alza o baja */}
       <Text style={styles.texto}>
         Variación últimas 24 horas:{' '}
         <Text
@@ -44,6 +80,8 @@ export const Cotizacion = ({ resultado, moneda }: CotizacionProps) => {
           {price_change_percentage_24h.toFixed(2)}%
         </Text>
       </Text>
+
+      {/** Última actualización formateada a 24h sin segundos */}
       <Text style={styles.texto}>
         Última Actualización:{' '}
         <Text style={styles.span}>
@@ -92,9 +130,9 @@ const styles = StyleSheet.create({
     fontFamily: 'Lato-Black',
   },
   alza: {
-    color: '#7CFC00',
+    color: '#7CFC00', // Verde para alza.
   },
   baja: {
-    color: '#FF4500',
+    color: '#FF4500', // Rojo/naranja para baja.
   },
 });
