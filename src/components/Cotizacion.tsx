@@ -1,30 +1,38 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
+import { formatearCantidad } from '../helpers';
 import type { ResultadoCotizacion } from '../../App';
 
 interface CotizacionProps {
   resultado: ResultadoCotizacion | null;
+  moneda: string;
 }
 
-export const Cotizacion = ({ resultado }: CotizacionProps) => {
+export const Cotizacion = ({ resultado, moneda }: CotizacionProps) => {
   if (!resultado) {
     return null;
   }
 
-  const { current_price, high_24h, low_24h, price_change_percentage_24h, last_updated } = resultado;
+  const { name, symbol, current_price, high_24h, low_24h, price_change_percentage_24h, last_updated, image } = resultado;
+  const monedaSeleccionada = moneda || 'USD';
 
   return (
     <View style={styles.resultado}>
+      {image ? <Image source={{ uri: image }} style={styles.logo} /> : null}
+      <Text style={[styles.texto, styles.titulo]}>
+        {name} ({symbol.toUpperCase()})
+      </Text>
+
       <Text style={[styles.texto, styles.precio]}>
-        <Text style={styles.span}>{current_price.toLocaleString()}</Text>
+        <Text style={styles.span}>{formatearCantidad(current_price, monedaSeleccionada)}</Text>
       </Text>
       <Text style={styles.texto}>
         Precio más alto del día:{' '}
-        <Text style={styles.span}>{high_24h.toLocaleString()}</Text>
+        <Text style={styles.span}>{formatearCantidad(high_24h, monedaSeleccionada)}</Text>
       </Text>
       <Text style={styles.texto}>
         Precio más bajo del día:{' '}
-        <Text style={styles.span}>{low_24h.toLocaleString()}</Text>
+        <Text style={styles.span}>{formatearCantidad(low_24h, monedaSeleccionada)}</Text>
       </Text>
       <Text style={styles.texto}>
         Variación últimas 24 horas:{' '}
@@ -57,6 +65,17 @@ const styles = StyleSheet.create({
   resultado: {
     backgroundColor: '#5E49E2',
     padding: 20,
+    alignItems: 'center',
+  },
+  logo: {
+    width: 80,
+    height: 80,
+    marginBottom: 12,
+  },
+  titulo: {
+    fontFamily: 'Lato-Black',
+    fontSize: 20,
+    textTransform: 'uppercase',
   },
   texto: {
     color: '#FFF',

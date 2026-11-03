@@ -78,6 +78,7 @@ export const Formulario = ({moneda, guardarMoneda, criptomoneda, guardarCriptomo
         onValueChange={(valor: string) => obtenerMoneda(valor)}
         selectedValue={moneda}>
         <Picker.Item label="- Seleccione -" value="" />
+        <Picker.Item label="Guaraní Paraguayo" value="PYG" />
         <Picker.Item label="Dolar de Estados Unidos" value="USD" />
         <Picker.Item label="Peso Mexicano" value="MXN" />
         <Picker.Item label="Euro" value="EUR" />

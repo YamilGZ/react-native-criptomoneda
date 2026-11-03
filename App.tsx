@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View, Image, ScrollView } from 'react-native';
 import { Header, Formulario, Cotizacion } from './src/components';
+import { obtenerTasaUSD } from './src/helpers';
 import axios from 'axios';
 
 export interface ResultadoCotizacion {
@@ -35,10 +36,13 @@ const App = () => {
       guardarResultado(null);
 
       try {
+        const monedaTarget = moneda.toUpperCase();
+        const monedaAPI = monedaTarget === 'PYG' ? 'usd' : monedaTarget.toLowerCase();
+
         const url = 'https://api.coingecko.com/api/v3/coins/markets';
         const { data } = await axios.get<ResultadoCotizacion[]>(url, {
           params: {
-            vs_currency: moneda.toLowerCase(),
+            vs_currency: monedaAPI,
             ids: criptomoneda,
             order: 'market_cap_desc',
             per_page: 1,
@@ -48,7 +52,18 @@ const App = () => {
         });
 
         if (data && data.length > 0) {
-          guardarResultado(data[0]);
+          const cripto = data[0];
+
+          if (monedaTarget === 'PYG') {
+            const tasa = await obtenerTasaUSD('PYG');
+            if (tasa) {
+              cripto.current_price = cripto.current_price * tasa;
+              cripto.high_24h = cripto.high_24h * tasa;
+              cripto.low_24h = cripto.low_24h * tasa;
+            }
+          }
+
+          guardarResultado(cripto);
         } else {
           console.warn('No se encontraron datos para la cotización');
         }
@@ -86,7 +101,7 @@ const App = () => {
         {cargando ? (
           <ActivityIndicator size="large" color="#5E49E2" />
         ) : (
-          <Cotizacion resultado={resultado} />
+          <Cotizacion resultado={resultado} moneda={moneda} />
         )}
       </View>
     </ScrollView>
