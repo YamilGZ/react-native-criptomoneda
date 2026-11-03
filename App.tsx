@@ -8,9 +8,12 @@ export interface ResultadoCotizacion {
   symbol: string;
   name: string;
   current_price: number;
+  high_24h: number;
+  low_24h: number;
   market_cap: number;
   total_volume: number;
   price_change_percentage_24h: number;
+  last_updated: string;
   image: string;
 }
 
@@ -77,10 +80,14 @@ const App = () => {
           guardarCriptomoneda={guardarCriptomoneda}
           guardarConsultarAPI={guardarConsultarAPI}
         />
+      </View>
 
-        {cargando && <ActivityIndicator size="large" color="#5e49e2" style={styles.cargando} />}
-
-        {resultado && !cargando && <Cotizacion resultado={resultado} />}
+      <View style={{ marginTop: 40 }}>
+        {cargando ? (
+          <ActivityIndicator size="large" color="#5E49E2" />
+        ) : (
+          <Cotizacion resultado={resultado} />
+        )}
       </View>
     </ScrollView>
   );
