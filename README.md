@@ -99,11 +99,9 @@ adb shell am start -n com.criptomonedas/.MainActivity
 
 ## 📸 Vistas de la app
 
-> Sección reservada para capturas de pantalla. Agregá las imágenes en una carpeta `screenshots/` y referencialas aquí:
-
-```markdown
-![Pantalla principal](screenshots/screenshot-home.png)
-```
+| Pantalla principal | Formulario de consulta | Resultado de cotización |
+|---|---|---|
+| ![Pantalla principal](screenshots/screenshot-home.png) | ![Formulario de consulta](screenshots/screenshot-formulario.png) | ![Resultado de cotización](screenshots/screenshot-cotizacion.png) |
 
 ---
 

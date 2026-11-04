@@ -1,8 +1,8 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Forzar tema claro para que pickers y diálogos no usen modo oscuro del sistema. -->
         <item name="android:editTextBackground">@drawable/rn_edit_text_material</item>
     </style>
 

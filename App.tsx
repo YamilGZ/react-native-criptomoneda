@@ -5,6 +5,7 @@ import {
   View,
   Image,
   ScrollView,
+  StatusBar,
 } from 'react-native';
 import { Header, Formulario, Cotizacion } from './src/components';
 import { obtenerTasaUSD } from './src/helpers';
@@ -111,40 +112,52 @@ const App = () => {
   }, [consultarAPI]);
 
   return (
-    <ScrollView>
-      {/** Encabezado de la app */}
-      <Header />
+    <>
+      {/** Barra de estado con iconos oscuros (negros) */}
+      <StatusBar barStyle="dark-content" />
 
-      {/** Imagen principal */}
-      <Image
-        style={styles.imagen}
-        source={require('./assets/img/cryptomonedas.png')}
-      />
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {/** Encabezado de la app */}
+        <Header />
 
-      {/** Formulario de selección */}
-      <View style={styles.contenido}>
-        <Formulario
-          moneda={moneda}
-          criptomoneda={criptomoneda}
-          guardarMoneda={guardarMoneda}
-          guardarCriptomoneda={guardarCriptomoneda}
-          guardarConsultarAPI={guardarConsultarAPI}
+        {/** Imagen principal */}
+        <Image
+          style={styles.imagen}
+          source={require('./assets/img/cryptomonedas.png')}
         />
-      </View>
 
-      {/** Área de resultado o spinner de carga */}
-      <View style={{ marginTop: 40 }}>
-        {cargando ? (
-          <ActivityIndicator size="large" color="#5E49E2" />
-        ) : (
-          <Cotizacion resultado={resultado} moneda={moneda} />
-        )}
-      </View>
-    </ScrollView>
+        {/** Formulario de selección */}
+        <View style={styles.contenido}>
+          <Formulario
+            moneda={moneda}
+            criptomoneda={criptomoneda}
+            guardarMoneda={guardarMoneda}
+            guardarCriptomoneda={guardarCriptomoneda}
+            guardarConsultarAPI={guardarConsultarAPI}
+          />
+        </View>
+
+        {/** Área de resultado o spinner de carga */}
+        <View style={styles.resultadoArea}>
+          {cargando ? (
+            <ActivityIndicator size="large" color="#5E49E2" />
+          ) : (
+            <Cotizacion resultado={resultado} moneda={moneda} />
+          )}
+        </View>
+
+        {/** Espacio inferior para evitar que los botones del celular tapen el contenido */}
+        <View style={styles.bottomPadding} />
+      </ScrollView>
+    </>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollContent: {
+    flexGrow: 1,
+    backgroundColor: '#fff', // Forzar fondo blanco aunque el celular tenga modo oscuro.
+  },
   contenido: {
     marginHorizontal: '2.5%',
   },
@@ -152,6 +165,12 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 150,
     marginHorizontal: '1%',
+  },
+  resultadoArea: {
+    marginTop: 40,
+  },
+  bottomPadding: {
+    height: 50, // Espacio para los botones de navegación del celular.
   },
   cargando: {
     marginTop: 20,

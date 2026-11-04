@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "build:apk": "cd android && ./gradlew assembleRelease && cp app/build/outputs/apk/release/app-release.apk ../app-criptomonedas.apk",
+    "build:apk": "powershell -ExecutionPolicy Bypass -Command \"cd android; ./gradlew.bat assembleRelease; Copy-Item app\\build\\outputs\\apk\\release\\app-release.apk ..\\app-criptomonedas.apk\" ",
     "clean:deps": "rm -rf android/app/build android/app/.cxx android/.gradle android/build node_modules"
   },
   "dependencies": {

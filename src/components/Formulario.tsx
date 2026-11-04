@@ -101,32 +101,38 @@ export const Formulario = ({
       {/** Selector de moneda fiduciaria */}
       <Text style={styles.label}>Moneda</Text>
 
-      <Picker
-        onValueChange={(valor: string) => obtenerMoneda(valor)}
-        selectedValue={moneda}>
-        <Picker.Item label="- Seleccione -" value="" />
-        <Picker.Item label="Guaraní Paraguayo" value="PYG" />
-        <Picker.Item label="Dolar de Estados Unidos" value="USD" />
-        <Picker.Item label="Peso Mexicano" value="MXN" />
-        <Picker.Item label="Euro" value="EUR" />
-        <Picker.Item label="Libra Esterlina" value="GBP" />
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          dropdownIconColor="#000"
+          onValueChange={(valor: string) => obtenerMoneda(valor)}
+          selectedValue={moneda}>
+          <Picker.Item label="- Seleccione -" value="" />
+          <Picker.Item label="Guaraní Paraguayo" value="PYG" />
+          <Picker.Item label="Dolar de Estados Unidos" value="USD" />
+          <Picker.Item label="Peso Mexicano" value="MXN" />
+          <Picker.Item label="Euro" value="EUR" />
+          <Picker.Item label="Libra Esterlina" value="GBP" />
+        </Picker>
+      </View>
 
       {/** Selector de criptomoneda */}
       <Text style={styles.label}>Criptomoneda</Text>
 
-      <Picker
-        onValueChange={(valor: string) => obtenerCriptomoneda(valor)}
-        selectedValue={criptomoneda}>
-        <Picker.Item label="- Seleccione -" value="" />
-        {criptomonedas.map((cripto) => (
-          <Picker.Item
-            key={cripto.id}
-            label={`${cripto.name} (${cripto.symbol.toUpperCase()})`}
-            value={cripto.id}
-          />
-        ))}
-      </Picker>
+      <View style={styles.pickerContainer}>
+        <Picker
+          dropdownIconColor="#000"
+          onValueChange={(valor: string) => obtenerCriptomoneda(valor)}
+          selectedValue={criptomoneda}>
+          <Picker.Item label="- Seleccione -" value="" />
+          {criptomonedas.map((cripto) => (
+            <Picker.Item
+              key={cripto.id}
+              label={`${cripto.name} (${cripto.symbol.toUpperCase()})`}
+              value={cripto.id}
+            />
+          ))}
+        </Picker>
+      </View>
 
       {/** Botón que dispara la cotización */}
       <TouchableHighlight
@@ -144,6 +150,13 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     fontSize: 22,
     marginVertical: 20,
+    color: '#000',
+  },
+  pickerContainer: {
+    backgroundColor: '#f2f2f2',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#ddd',
   },
   btnCotizar: {
     backgroundColor: '#5e49e2',
