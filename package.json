@@ -9,8 +9,8 @@
     "lint": "eslint .",
     "start": "react-native start",
     "test": "jest",
-    "build:apk": "powershell -ExecutionPolicy Bypass -Command \"cd android; ./gradlew.bat assembleRelease; Copy-Item app\\build\\outputs\\apk\\release\\app-release.apk ..\\app-criptomonedas.apk\" ",
-    "clean:deps": "rm -rf android/app/build android/app/.cxx android/.gradle android/build node_modules"
+    "build:apk": "node -e \"const{spawn}=require('child_process');const path=require('path');const cwd=path.resolve('android');const isWin=process.platform==='win32';const gradlew=path.join(cwd,isWin?'gradlew.bat':'gradlew');const cmd=isWin?'cmd':gradlew;const args=isWin?['/c',gradlew,'assembleRelease']:['assembleRelease'];const build=spawn(cmd,args,{stdio:'inherit',cwd});build.on('close',(code)=>{if(code!==0){console.error('Error en build:',code);process.exit(code);}const src=path.join(cwd,'app','build','outputs','apk','release','app-release.apk');const dst=path.join(cwd,'..','app-criptomonedas.apk');require('fs').copyFileSync(src,dst);console.log('APK copiada a',dst);});\"",
+    "clean:deps": "node -e \"['android/app/build','android/app/.cxx','android/.gradle','android/build','node_modules'].forEach(d=>{try{require('fs').rmSync(d,{recursive:true,force:true});console.log('Eliminado:',d);}catch(e){console.error('Error al eliminar',d,e.message);}})\""
   },
   "dependencies": {
     "@react-native-picker/picker": "^2.11.4",
