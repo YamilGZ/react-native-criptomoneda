@@ -142,12 +142,14 @@ const App = () => {
           {cargando ? (
             <ActivityIndicator size="large" color="#5E49E2" />
           ) : (
-            <Cotizacion resultado={resultado} moneda={moneda} />
+            <>
+              <Cotizacion resultado={resultado} moneda={moneda} />
+
+              {/** Espacio inferior con fondo morado para evitar franja blanca */}
+              {resultado && <View style={styles.bottomPadding} />}
+            </>
           )}
         </View>
-
-        {/** Espacio inferior para evitar que los botones del celular tapen el contenido */}
-        <View style={styles.bottomPadding} />
       </ScrollView>
     </>
   );
