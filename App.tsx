@@ -171,6 +171,7 @@ const styles = StyleSheet.create({
   },
   bottomPadding: {
     height: 50, // Espacio para los botones de navegación del celular.
+    backgroundColor: '#5E49E2', // Mismo color que la cotización para continuidad visual.
   },
   cargando: {
     marginTop: 20,
